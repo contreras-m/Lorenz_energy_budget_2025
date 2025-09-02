@@ -1,10 +1,8 @@
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyBboxPatch
 import xarray as xr
 import numpy as np
 import netCDF4
 import matplotlib.pyplot as plt
-from nclcmaps import cmap #***
 #import cm #***
 import cartopy #***
 import cartopy.crs as ccrs #***
@@ -15,7 +13,10 @@ import scipy.io as sio
 import xarray as xr
 import toolscroco as tlc
 
+
+# Script to generate map figures of each variable
 def fig_var(mvar):
+    # Load grid
     gname='/Users/contrema/Documents/PhD/Data/croco_grd.nc'
 
     ds = xr.open_dataset(gname)
@@ -27,6 +28,7 @@ def fig_var(mvar):
     h=ds['h'][:,:].data
     ds.close()
 
+    # Selection region (depth than 200 m)
     posh=np.where(h<200)
     [M,L]=np.shape(maskC)
     posnan=np.where((maskC==0))
@@ -34,18 +36,22 @@ def fig_var(mvar):
     masknan[posnan]=np.nan
     masknan[posh]=np.nan
 
-  
-    clm1="bwr"
+
+    # Configureation figure
+    clm1="bwr" # Colormap
+
+    # Limite values
     mymax=150
     mymin=-150
-    #boundsT=np.arange(myminT,mymaxT+0.1,5)
 
+    # Region Area
     minlon=np.min(lonC)
     minlat=np.min(latC)
     maxlon=np.max(lonC)
     maxlat=np.max(latC)
     extent = [minlon, maxlon, minlat, maxlat-0.3]
 
+    # Name variables
     varterm=["AK_S","AK_B","C_K(SM,B)","C_K(B,SM)","AP_S","AP_B","PK_S","P_S","P_B","C_P(SM,B)","C_P(B,SM)","PK_B",
              "FP_B","50*FP_S","tau_B(b)","tau_S(b)","tau_B(s)","tau_S(s)","tau_B(s) ageo","tau_S(s) ageo","tau_B(s) geo","tau_S(s) geo",
              "FK_S+DK_S","FP_S+DP_S","FK_B+DK_B","FP_B+DP_B", "DK_S","DP_S","DK_B","DP_B"]
